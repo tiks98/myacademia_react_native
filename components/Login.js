@@ -39,19 +39,19 @@ const Login = ({ navigation }) => {
     if (Platform.OS === "ios") {
       // navigation.navigate("Home");
       console.log("IOS");
-      // authContext.setIsAuthenticated(true);
-      AuthService.login(user).then((data) => {
-        console.log(data);
-        const { isAuthenticated, user, message } = data;
-        if (isAuthenticated) {
-          authContext.setUser(user);
-          //   authContext.setGoogleLogin(false);
-          authContext.setIsAuthenticated(isAuthenticated);
-          console.log("Authenticated");
-          // props.history.push("/");
-          navigation.navigate("Home");
-        } else setMessage(message);
-      });
+      authContext.setIsAuthenticated(true);
+      // AuthService.login(user).then((data) => {
+      //   console.log(data);
+      //   const { isAuthenticated, user, message } = data;
+      //   if (isAuthenticated) {
+      //     authContext.setUser(user);
+      //     //   authContext.setGoogleLogin(false);
+      //     authContext.setIsAuthenticated(isAuthenticated);
+      //     console.log("Authenticated");
+      //     // props.history.push("/");
+      //     navigation.navigate("Home");
+      //   } else setMessage(message);
+      // });
     } else if (Platform.OS === "android") {
       // console.log("android");
       // authContext.setIsAuthenticated(true);

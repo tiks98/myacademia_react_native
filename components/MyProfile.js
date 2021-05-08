@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View, TextInput } from "react-native";
 import Axios from "axios";
 import { useEffect } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import { Avatar } from "react-native-elements";
 
 function MyProfile({ navigation }) {
   const { isAuthenticated, user, googleLogin, myprofileId } = React.useContext(
@@ -26,11 +27,7 @@ function MyProfile({ navigation }) {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    if (user === null) {
-      setUsername("test2");
-    } else {
-      setUsername(user.username);
-    }
+    const username = user.username;
     Axios({
       method: "GET",
       params: {
@@ -120,6 +117,21 @@ function MyProfile({ navigation }) {
       {isAuthenticated ? null : <Redirect to="Login" />}
       <Text style={styles.heading}>My Profile</Text>
       {/* <Button onPress={() => navigation.goBack()} title="Go back home" /> */}
+      {profile.photoUrl === "" ? (
+        <Avatar
+          rounded
+          size="xlarge"
+          icon={{ name: "user", type: "font-awesome" }}
+          containerStyle={{ backgroundColor: "#838383", margin: 10 }}
+        />
+      ) : (
+        <Avatar
+          containerStyle={styles.avatarPhoto}
+          rounded
+          size="xlarge"
+          source={{ uri: `${profile.photoUrl}` }}
+        />
+      )}
       <Text style={styles.text}>
         Name: {profile.firstName} {profile.lastName}
       </Text>
@@ -144,13 +156,19 @@ function MyProfile({ navigation }) {
           .map((word) => word && "🍕")
           .join(" ")}
       </Text> */}
-      <TextInput
+      {/* <TextInput
         style={{ height: 40 }}
         placeholder="username"
         onChangeText={(username) => setUsername(username)}
         defaultValue={username}
       />
-      <Button title="get profile data" onPress={getProfile} />
+      <Button title="get profile data" onPress={getProfile} /> */}
+      <Button
+        title="see friend's list"
+        onPress={() =>
+          navigation.navigate("FriendsList", { friendsList: profile.friends })
+        }
+      />
     </View>
   );
 }
@@ -173,6 +191,9 @@ const styles = StyleSheet.create({
   textwopadding: {
     fontSize: 26,
     paddingLeft: 10,
+  },
+  avatarPhoto: {
+    marginLeft: 15,
   },
 });
 

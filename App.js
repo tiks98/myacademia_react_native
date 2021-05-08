@@ -19,12 +19,25 @@ import Login from "./components/Login";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AuthService from "./Services/AuthService";
 import AuthProvider, { AuthContext } from "./Context/AuthContext";
+import FriendsList from "./components/FriendsList";
+import Profile from "./components/Profile";
+import Search from "./components/Search";
 
 function HomeScreen({ navigation }) {
+  const authContext = React.useContext(AuthContext);
   const onLogoutSuccess = (res) => {
+    const {
+      isAuthenticated,
+      user,
+      setIsAuthenticated,
+      setUser,
+      setGoogleLogin,
+      googleLogin,
+      myprofileId,
+    } = React.useContext(AuthContext);
     AuthService.logout().then((data) => {
       if (data.success) {
-        setUser(data.user);
+        setUser(null);
         setIsAuthenticated(false);
         setGoogleLogin(false);
       } else {
@@ -64,11 +77,15 @@ function HomeScreen({ navigation }) {
         onPress={() => console.log("hello")}
       /> */}
       <Icon
-        name="facebook"
+        name="search"
         backgroundColor="#3b5998"
         size={50}
-        style={{ paddingLeft: 20 }}
-        onPress={() => navigation.navigate("Detail")}
+        style={{
+          paddingLeft: 20,
+          alignContent: "flex-end",
+          position: "relative",
+        }}
+        onPress={() => navigation.navigate("Search")}
       />
 
       <Button
@@ -157,6 +174,9 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Detail" component={DetailScreen} />
             <Stack.Screen name="MyProfile" component={MyProfile} />
+            <Stack.Screen name="FriendsList" component={FriendsList} />
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Search" component={Search} />
             {/* <Stack.Screen name="Login" component={Login} /> */}
           </Stack.Navigator>
         ) : (
