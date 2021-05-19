@@ -1,6 +1,6 @@
 export default {
   login: (user) => {
-    return fetch("http://192.168.126.1:4000/user/login", {
+    return fetch("https://myacademiabe.herokuapp.com/user/login", {
       method: "post",
       body: JSON.stringify(user),
       headers: {
@@ -21,14 +21,16 @@ export default {
     });
   },
   logout: () => {
-    return fetch("http://192.168.126.1:4000/user/logout")
+    return fetch("https://myacademiabe.herokuapp.com/user/logout")
       .then((res) => res.json())
       .then((data) => data);
   },
   isAuthenticated: () => {
-    return fetch("http://192.168.126.1:4000/user/authenticated").then((res) => {
-      if (res.status !== 401) return res.json().then((data) => data);
-      else return { isAuthenticated: false, user: { username: "" } };
-    });
+    return fetch("https://myacademiabe.herokuapp.com/user/authenticated").then(
+      (res) => {
+        if (res.status !== 401) return res.json().then((data) => data);
+        else return { isAuthenticated: false, user: { username: "" } };
+      }
+    );
   },
 };

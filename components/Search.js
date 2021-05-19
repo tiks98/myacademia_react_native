@@ -15,7 +15,7 @@ const Search = ({ navigation }) => {
       params: {
         firstName: firstname,
       },
-      url: "http://192.168.126.1:4000/search/firstName",
+      url: "https://myacademiabe.herokuapp.com/search/firstName",
     }).then((data) => {
       console.log(data);
       if (data.data === null) {
@@ -35,7 +35,10 @@ const Search = ({ navigation }) => {
       <TextInput
         style={{ height: 40, marginHorizontal: 15 }}
         placeholder="firstname"
-        onChangeText={(firstname) => setFirstname(firstname)}
+        onChangeText={(firstname) => {
+          setFirstname(firstname);
+          setGotResults(false);
+        }}
         defaultValue={firstname}
       />
       {gotResults ? null : getSearchResults()}

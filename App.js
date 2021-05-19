@@ -22,24 +22,26 @@ import AuthProvider, { AuthContext } from "./Context/AuthContext";
 import FriendsList from "./components/FriendsList";
 import Profile from "./components/Profile";
 import Search from "./components/Search";
+import CreateProfile from "./components/CreateProfile";
 
 function HomeScreen({ navigation }) {
   const authContext = React.useContext(AuthContext);
+  const {
+    isAuthenticated,
+    user,
+    setIsAuthenticated,
+    setUser,
+    setGoogleLogin,
+    googleLogin,
+    myprofileId,
+  } = React.useContext(AuthContext);
   const onLogoutSuccess = (res) => {
-    const {
-      isAuthenticated,
-      user,
-      setIsAuthenticated,
-      setUser,
-      setGoogleLogin,
-      googleLogin,
-      myprofileId,
-    } = React.useContext(AuthContext);
     AuthService.logout().then((data) => {
       if (data.success) {
         setUser(null);
         setIsAuthenticated(false);
-        setGoogleLogin(false);
+        // setGoogleLogin(false);
+        // navigation.navigate("Login");
       } else {
         console.log("Logout unsuccessful");
       }
@@ -89,8 +91,8 @@ function HomeScreen({ navigation }) {
       />
 
       <Button
-        title="Go To Details Page"
-        onPress={() => navigation.navigate("Detail")}
+        title="Go To Create Profile Page"
+        onPress={() => navigation.navigate("CreateProfile")}
       />
       <Button
         title="Go To My Profile Page"
@@ -177,6 +179,7 @@ export default function App() {
             <Stack.Screen name="FriendsList" component={FriendsList} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Search" component={Search} />
+            <Stack.Screen name="CreateProfile" component={CreateProfile} />
             {/* <Stack.Screen name="Login" component={Login} /> */}
           </Stack.Navigator>
         ) : (

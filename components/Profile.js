@@ -5,9 +5,8 @@ import { Avatar } from "react-native-elements";
 import { AuthContext } from "../Context/AuthContext";
 
 const Profile = ({ route }) => {
-  const { isAuthenticated, user, googleLogin, myprofileId } = React.useContext(
-    AuthContext
-  );
+  const { isAuthenticated, user, googleLogin, myprofileId } =
+    React.useContext(AuthContext);
   const [profile, setProfile] = useState({
     id: "",
     photoUrl: "",
@@ -26,6 +25,7 @@ const Profile = ({ route }) => {
   const [friends, setFriends] = useState([]);
   const [isFriends, setIsFriends] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
+  const [message, setMessage] = useState(null);
   const [friendship, setFriendship] = useState({
     requester: "",
     recipient: "",
@@ -44,7 +44,7 @@ const Profile = ({ route }) => {
       params: {
         username: route.params.username,
       },
-      url: "http://192.168.126.1:4000/profile",
+      url: "https://myacademiabe.herokuapp.com/profile",
     }).then((data) => {
       console.log(data);
       if (data.data === null) {
@@ -69,7 +69,7 @@ const Profile = ({ route }) => {
     });
     Axios({
       method: "GET",
-      url: "http://192.168.126.1:4000/profile",
+      url: "https://myacademiabe.herokuapp.com/profile",
       params: {
         username: user.username,
       },
@@ -90,7 +90,7 @@ const Profile = ({ route }) => {
   const getFriendshipStatus = () => {
     Axios({
       method: "GET",
-      url: "http:///192.168.126.1:4000/getfriends/status",
+      url: "https://myacademiabe.herokuapp.com/getfriends/status",
       params: {
         requester: user.username,
         recipient: profile.username,
@@ -111,7 +111,7 @@ const Profile = ({ route }) => {
     if (friends.requester !== user.username) {
       Axios({
         method: "GET",
-        url: "http:///192.168.126.1:4000/getfriends/status",
+        url: "https://myacademiabe.herokuapp.com/getfriends/status",
         params: {
           requester: profile.username,
           recipient: user.username,
@@ -141,7 +141,7 @@ const Profile = ({ route }) => {
         recipient: profile.username,
         status: 1,
       },
-      url: "http://192.168.126.1:4000/sendfriendrequest",
+      url: "https://myacademiabe.herokuapp.com/sendfriendrequest",
     }).then((data) => {
       const { message } = data.data;
       setMessage(message);
@@ -154,7 +154,7 @@ const Profile = ({ route }) => {
         notification: `${myProfileID.firstName} ${myProfileID.lastName} has sent you friend request`,
         link: `${user.username}`,
       },
-      url: `http://192.168.126.1:4000/addnotification/${profile.id}`,
+      url: `https://myacademiabe.herokuapp.com/addnotification/${profile.id}`,
     }).then((data) => {
       console.log(data.data);
       //   setNotificationPopUp({
@@ -164,15 +164,15 @@ const Profile = ({ route }) => {
       //     type: "info",
       //   });
       console.log("Friend Request sent");
-      setTimeout(() => {
-        reloadPage();
-      }, 2000);
+      // setTimeout(() => {
+      //   reloadPage();
+      // }, 2000);
     });
   };
 
   const acceptRequest = () => {
     const friendshipId = friends._id;
-    const url = "http://192.168.126.1:4000/updaterequest/";
+    const url = "https://myacademiabe.herokuapp.com/updaterequest/";
     const dynamicUrl = url + friendshipId;
     Axios({
       method: "put",
@@ -191,7 +191,7 @@ const Profile = ({ route }) => {
     });
     // if(friends.requester === user.username)
     const profileId = profile.id;
-    const url2 = "http://192.168.126.1:4000/addfprofile/";
+    const url2 = "https://myacademiabe.herokuapp.com/addfprofile/";
     const requesterUrl = url2 + profileId;
     console.log(profileId);
     console.log(requesterUrl);
@@ -223,7 +223,7 @@ const Profile = ({ route }) => {
         notification: `${myProfileID.firstName} ${myProfileID.lastName} has accepted your friend request`,
         link: `${friends.recipient}`,
       },
-      url: `http://192.168.126.1:4000/addnotification/${profile.id}`,
+      url: `https://myacademiabe.herokuapp.com/addnotification/${profile.id}`,
     }).then((data) => {
       console.log(data.data);
       //   setNotificationPopUp({
@@ -241,7 +241,7 @@ const Profile = ({ route }) => {
       console.log("No friend data found");
     } else {
       const friendshipId = friends._id;
-      const url = "http://192.168.126.1:4000/deleterequest/";
+      const url = "https://myacademiabe.herokuapp.com/deleterequest/";
       const dynamicUrl = url + friendshipId;
       Axios({
         method: "delete",
@@ -250,10 +250,10 @@ const Profile = ({ route }) => {
         const { message } = data.data;
         setMessage(message);
         console.log(message);
-        reloadPage();
+        // reloadPage();
       });
       const profileId = profile.id;
-      const staticurl = "http://192.168.126.1:4000/rffprofile/";
+      const staticurl = "https://myacademiabe.herokuapp.com/rffprofile/";
       const requesterUrl = staticurl + profileId;
       console.log(profileId);
       console.log(requesterUrl);
@@ -356,6 +356,7 @@ const Profile = ({ route }) => {
           )}
         </View>
       )}
+      {message === null ? null : <Text>{message.msgBody}</Text>}
     </View>
   );
 };
