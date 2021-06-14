@@ -12,7 +12,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import MyProfile from "./components/MyProfile";
 import Login from "./components/Login";
 // import { Icon } from "react-native-elements";
@@ -23,6 +23,9 @@ import FriendsList from "./components/FriendsList";
 import Profile from "./components/Profile";
 import Search from "./components/Search";
 import CreateProfile from "./components/CreateProfile";
+import { TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 function HomeScreen({ navigation }) {
   const authContext = React.useContext(AuthContext);
@@ -56,56 +59,47 @@ function HomeScreen({ navigation }) {
   };
 
   return (
-    <View>
-      {/* <AuthProvider> */}
-      <Text style={styles.heading}>Home Screen</Text>
-      {/* <TextInput
-        style={{ height: 40 }}
-        placeholder="username"
-        onChangeText={(username) => setText(username)}
-        defaultValue={username}
-      />
-      <TextInput
-        style={{ height: 40 }}
-        placeholder="password"
-        onChangeText={(password) => setText(password)}
-        defaultValue={password}
-      /> */}
-      {/* <Icon
-        raised
-        name="heartbeat"
-        type="font-awesome"
-        color="#f50"
-        onPress={() => console.log("hello")}
-      /> */}
-      <Icon
-        name="search"
-        backgroundColor="#3b5998"
-        size={50}
-        style={{
-          paddingLeft: 20,
-          alignContent: "flex-end",
-          position: "relative",
-        }}
-        onPress={() => navigation.navigate("Search")}
-      />
-
-      <Button
-        title="Go To Create Profile Page"
-        onPress={() => navigation.navigate("CreateProfile")}
-      />
-      <Button
-        title="Go To My Profile Page"
-        onPress={() => navigation.navigate("MyProfile")}
-      />
-      <Button title="Logout" onPress={onLogoutSuccess} />
-      <Button title="check authentication" onPress={checkAuthenticaiton} />
-      {/* <Button
+    <SafeAreaView>
+      <View>
+        <View style={styles.homeScreenBar}>
+          <Text style={styles.heading}>Home Screen</Text>
+          <TouchableOpacity
+            style={{
+              justifyContent: "space-around",
+              flex: 1,
+              alignItems: "center",
+              borderRadius: 50,
+              backgroundColor: "#6d2aff",
+              marginRight: 20,
+              height: 62,
+              marginVertical: 10,
+            }}
+          >
+            <Icon
+              name="search"
+              color="#FFFFFF"
+              size={30}
+              onPress={() => navigation.navigate("Search")}
+            />
+          </TouchableOpacity>
+        </View>
+        <Button
+          title="Go To Create Profile Page"
+          onPress={() => navigation.navigate("CreateProfile")}
+        />
+        <Button
+          title="Go To My Profile Page"
+          onPress={() => navigation.navigate("MyProfile")}
+        />
+        <Button title="Logout" onPress={onLogoutSuccess} />
+        <Button title="check authentication" onPress={checkAuthenticaiton} />
+        {/* <Button
         title="Go to My Profile Page"
         onPress={() => navigation.openDrawer()}
       /> */}
-      {/* </AuthProvider> */}
-    </View>
+        {/* </AuthProvider> */}
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -123,7 +117,7 @@ function DetailScreen() {
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-// const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -157,6 +151,32 @@ export default function App() {
     console.log("profile page");
   };
 
+  const HomeStack = createStackNavigator();
+
+  function HomeStackScreen() {
+    return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === "Home") {
+              iconName = focused ? "home" : "home-outline";
+            } else if (route.name === "CreateProfile") {
+              iconName = focused ? "person-circle-outline" : "person-circle";
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="CreateProfile" component={CreateProfile} />
+      </Tab.Navigator>
+    );
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -171,30 +191,34 @@ export default function App() {
       }}
     >
       <NavigationContainer>
-        {isAuthenticated ? (
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Detail" component={DetailScreen} />
-            <Stack.Screen name="MyProfile" component={MyProfile} />
-            <Stack.Screen name="FriendsList" component={FriendsList} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Search" component={Search} />
-            <Stack.Screen name="CreateProfile" component={CreateProfile} />
-            {/* <Stack.Screen name="Login" component={Login} /> */}
-          </Stack.Navigator>
-        ) : (
-          <Login />
-        )}
+        {/* {isAuthenticated ? ( */}
+        {/* <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Detail" component={DetailScreen} />
+          <Stack.Screen name="MyProfile" component={MyProfile} />
+          <Stack.Screen name="FriendsList" component={FriendsList} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Search" component={Search} />
+          <Stack.Screen name="CreateProfile" component={CreateProfile} /> */}
+        {/* <Stack.Screen name="Login" component={Login} /> */}
+        {/* </Stack.Navigator> */}
+        {/* ) : ( */}
+        {/* <Login /> */}
+        {/* )} */}
 
         {/* <Tab.Navigator initialRouteName="Login">
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="MyProfile" component={MyProfile} />
         <Tab.Screen name="Login" component={Login} />
       </Tab.Navigator> */}
-        {/* <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="MyProfile" component={MyProfile} />
-      </Drawer.Navigator> */}
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home" component={HomeStackScreen} />
+          <Drawer.Screen name="MyProfile" component={MyProfile} />
+          <Drawer.Screen name="FriendsList" component={FriendsList} />
+          <Drawer.Screen name="Profile" component={Profile} />
+          <Drawer.Screen name="Search" component={Search} />
+          <Drawer.Screen name="CreateProfile" component={CreateProfile} />
+        </Drawer.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
   );
@@ -208,7 +232,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   heading: {
-    fontSize: 42,
+    fontSize: 32,
     padding: 20,
+    flex: 3,
+  },
+  homeScreenBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 15,
   },
 });
